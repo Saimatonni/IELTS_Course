@@ -7,6 +7,7 @@ interface VideoTrailerProps {
 
 const VideoTrailer: React.FC<VideoTrailerProps> = ({ media }) => {
   const trailerVideo = media.find(m => m.resource_type === 'video');
+  console.log("",trailerVideo)
 
   if (!trailerVideo) return null;
 
