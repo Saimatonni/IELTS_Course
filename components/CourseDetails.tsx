@@ -6,9 +6,9 @@ interface CourseDetailsProps {
 }
 
 const CourseDetails: React.FC<CourseDetailsProps> = ({ section }) => {
-  if (section.type !== 'about') return null;
-
   const [expandedItems, setExpandedItems] = useState<{ [key: string]: boolean }>({});
+
+  if (section.type !== 'about') return null;
 
   const toggleExpanded = (id: string) => {
     setExpandedItems(prev => ({

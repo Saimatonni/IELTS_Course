@@ -20,6 +20,7 @@ interface HomeProps {
 const Home: React.FC<HomeProps> = ({ courseData, lang }) => {
   const router = useRouter();
   const [activeSection, setActiveSection] = useState(0);
+  const [showFloatingSidebar, setShowFloatingSidebar] = useState(false);
   
   useEffect(() => {
     const urlLang = router.query.lang as string;
@@ -27,6 +28,22 @@ const Home: React.FC<HomeProps> = ({ courseData, lang }) => {
       router.replace(router.asPath);
     }
   }, [router.query.lang, lang, router]);
+
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const bannerElement = document.querySelector('.course-banner');
+      if (bannerElement) {
+        const bannerBottom = bannerElement.getBoundingClientRect().bottom;
+        setShowFloatingSidebar(bannerBottom < 100);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); 
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const instructorSection = courseData.sections?.find(s => s.type === 'instructors');
   const featuresSection = courseData.sections?.find(s => s.type === 'features');
@@ -97,6 +114,19 @@ const Home: React.FC<HomeProps> = ({ courseData, lang }) => {
     }
   };
 
+  // Sidebar component with shared props
+  const sidebarProps = {
+    media: courseData.media || [],
+    checklist: courseData.checklist || [],
+    ctaText: courseData.cta_text || { name: 'Enroll Now', value: 'enroll' },
+    lang,
+    price: {
+      current: 3850,
+      original: 5000,
+      discount: '1150 ৳ ছাড়'
+    }
+  };
+
   return (
     <>
       <Head>
@@ -140,7 +170,7 @@ const Home: React.FC<HomeProps> = ({ courseData, lang }) => {
 
       <main className="min-h-screen bg-white">
         {/* Course Banner */}
-        <div className="bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 text-white py-16 relative">
+        <div className="course-banner bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 text-white py-16 relative">
           <div className="container mx-auto px-4">
             <div className="flex flex-col lg:flex-row gap-8 items-start">
               
@@ -157,19 +187,10 @@ const Home: React.FC<HomeProps> = ({ courseData, lang }) => {
                 )}
               </div>
 
-              {/* Floating Sidebar - positioned absolutely */}
-              <div className="lg:absolute lg:right-20 lg:top-8 lg:w-96 w-full lg:z-10">
-                <CourseSidebar
-                  media={courseData.media || []}
-                  checklist={courseData.checklist || []}
-                  ctaText={courseData.cta_text || { name: 'Enroll Now', value: 'enroll' }}
-                  lang={lang}
-                  price={{
-                    current: 3850,
-                    original: 5000,
-                    discount: '1150 ৳ ছাড়'
-                  }}
-                />
+              <div className={`lg:absolute lg:right-20 lg:top-8 lg:w-96 w-full lg:z-10 transition-opacity duration-300 ${
+                showFloatingSidebar ? 'lg:opacity-0 lg:pointer-events-none' : 'lg:opacity-100'
+              }`}>
+                <CourseSidebar {...sidebarProps} />
               </div>
 
             </div>
@@ -285,7 +306,15 @@ const Home: React.FC<HomeProps> = ({ courseData, lang }) => {
               )}
             </div>
 
-            <div className="hidden lg:block lg:w-96 bg-white">
+            {/* Right Column  */}
+            <div className="hidden lg:block lg:w-96 bg-white relative">
+              <div className={`transition-all duration-300 ${
+                showFloatingSidebar 
+                  ? 'opacity-100 translate-y-0 sticky top-8' 
+                  : 'opacity-0 translate-y-4 pointer-events-none'
+              }`}>
+                <CourseSidebar {...sidebarProps} />
+              </div>
             </div>
 
           </div>

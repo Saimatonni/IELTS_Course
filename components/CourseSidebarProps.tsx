@@ -23,13 +23,25 @@ const CourseSidebar: React.FC<CourseSidebarProps> = ({
   const [selectedVideoIndex, setSelectedVideoIndex] = useState(0);
   
   const videos = media?.filter(m => m.resource_type === 'video') || [];
-  console.log("videos", videos);
   
   const currentVideo = videos[selectedVideoIndex];
   const youtubeEmbedUrl = currentVideo ? `https://www.youtube.com/embed/${currentVideo.resource_value}` : null;
 
   const getYoutubeThumbnail = (videoId: string) => {
     return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+  };
+
+  // Navigation functions
+  const goToPrevVideo = () => {
+    if (selectedVideoIndex > 0) {
+      setSelectedVideoIndex(selectedVideoIndex - 1);
+    }
+  };
+
+  const goToNextVideo = () => {
+    if (selectedVideoIndex < videos.length - 1) {
+      setSelectedVideoIndex(selectedVideoIndex + 1);
+    }
   };
 
   // Language-specific content
@@ -39,7 +51,9 @@ const CourseSidebar: React.FC<CourseSidebarProps> = ({
         trailerTitle: 'Course Trailer | IELTS Course',
         enrollButton: 'Enroll',
         whatYouGet: 'এই কোর্সে যা থাকছে',
-        currency: '৳'
+        currency: '৳',
+        prevVideo: 'পূর্ববর্তী ভিডিও',
+        nextVideo: 'পরবর্তী ভিডিও'
       };
     }
     
@@ -47,7 +61,9 @@ const CourseSidebar: React.FC<CourseSidebarProps> = ({
       trailerTitle: 'Course Trailer | IELTS Course',
       enrollButton: 'Enroll',
       whatYouGet: 'What You\'ll Get',
-      currency: '৳'
+      currency: '৳',
+      prevVideo: 'Previous Video',
+      nextVideo: 'Next Video'
     };
   };
 
@@ -61,6 +77,7 @@ const CourseSidebar: React.FC<CourseSidebarProps> = ({
         {youtubeEmbedUrl && (
           <>
             <div className="aspect-video relative p-2">
+              {/* Main Video Player */}
               <iframe
                 src={youtubeEmbedUrl}
                 title={content.trailerTitle}
@@ -69,13 +86,45 @@ const CourseSidebar: React.FC<CourseSidebarProps> = ({
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
               />
+              
+              {/* Left Navigation Arrow */}
+              {videos.length > 1 && selectedVideoIndex > 0 && (
+                <button
+                  className="absolute left-4 top-1/2 transform -translate-y-1/2 z-10 bg-black bg-opacity-60 hover:bg-opacity-80 text-white rounded-full p-3 shadow-lg transition-all duration-200 hover:scale-110"
+                  onClick={goToPrevVideo}
+                  aria-label={content.prevVideo}
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"/>
+                  </svg>
+                </button>
+              )}
+              
+              {/* Right Navigation Arrow */}
+              {videos.length > 1 && selectedVideoIndex < videos.length - 1 && (
+                <button
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 z-10 bg-black bg-opacity-60 hover:bg-opacity-80 text-white rounded-full p-3 shadow-lg transition-all duration-200 hover:scale-110"
+                  onClick={goToNextVideo}
+                  aria-label={content.nextVideo}
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"/>
+                  </svg>
+                </button>
+              )}
+              
+              {/* Video Counter Indicator */}
+              {videos.length > 1 && (
+                <div className="absolute bottom-4 right-4 bg-black bg-opacity-70 text-white px-3 py-1 rounded-full text-sm font-medium">
+                  {selectedVideoIndex + 1} / {videos.length}
+                </div>
+              )}
             </div>
             
             {/* Video thumbnails gallery */}
             {videos.length > 0 && (
               <div className="p-3 bg-gray-50 border-t">
                 <div className="relative">
-                  {/* Left Arrow */}
                   {videos.length > 5 && (
                     <button
                       className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-white bg-opacity-90 hover:bg-opacity-100 rounded-full p-2 shadow-md transition-all duration-200"
@@ -128,7 +177,7 @@ const CourseSidebar: React.FC<CourseSidebarProps> = ({
                             console.log(`Thumbnail loaded for video ${index}:`, (e.target as HTMLImageElement).src);
                           }}
                         />
-                        {/* Play icon overlay */}
+  
                         <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
                           <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M8 5v14l11-7z"/>
@@ -138,7 +187,7 @@ const CourseSidebar: React.FC<CourseSidebarProps> = ({
                     ))}
                   </div>
 
-                  {/* Right Arrow */}
+                  {/* Right Arrow for thumbnails */}
                   {videos.length > 5 && (
                     <button
                       className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-white bg-opacity-90 hover:bg-opacity-100 rounded-full p-2 shadow-md transition-all duration-200"
