@@ -4,7 +4,7 @@
 
 ### 🔗 Live Demo
 
-👉 [View the deployed version here](https://ielts-course-wheat.vercel.app/)
+👉 [View the deployed version here](https://ielts-course-mu.vercel.app/)
 
 ---
 
