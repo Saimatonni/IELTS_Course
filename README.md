@@ -42,11 +42,9 @@ npm start
 
 ```bash
 # Dockerfile is included for containerized builds.
-
 # 🛠 Build the Docker image
 docker build -t my-next-app .
 # ▶️ Run the Docker container
 docker run -p 3000:3000 my-next-app
-
 # Then visit: http://localhost:3000
 ```
