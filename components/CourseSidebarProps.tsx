@@ -187,7 +187,7 @@ const CourseSidebar: React.FC<CourseSidebarProps> = ({
                     ))}
                   </div>
 
-                  {/* Right Arrow for thumbnails */}
+                  {/* Right Arrow */}
                   {videos.length > 5 && (
                     <button
                       className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-white bg-opacity-90 hover:bg-opacity-100 rounded-full p-2 shadow-md transition-all duration-200"

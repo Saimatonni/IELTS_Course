@@ -114,7 +114,6 @@ const Home: React.FC<HomeProps> = ({ courseData, lang }) => {
     }
   };
 
-  // Sidebar component with shared props
   const sidebarProps = {
     media: courseData.media || [],
     checklist: courseData.checklist || [],
