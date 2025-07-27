@@ -4,7 +4,7 @@
 
 ### 🔗 Live Demo
 
-👉 [View the deployed version here](https://your-deployed-link.vercel.app/)
+👉 [View the deployed version here](https://ielts-course-wheat.vercel.app/)
 
 ---
 
@@ -21,17 +21,12 @@
 
 ### 🚀 How to Run Locally
 
-#### 🔧 Prerequisites
-
-- Node.js (v18+)
-- npm or yarn
-
 #### ▶️ Run without Docker
 
 ```bash
 # Clone the repo
-git clone https://github.com/your-username/10min_frontend.git
-cd 10min_frontend
+git clone https://github.com/Saimatonni/IELTS_Course.git
+cd IELTS_Course
 
 # Install dependencies
 npm install
@@ -42,7 +37,7 @@ npm run dev
 # Build for production
 npm run build
 npm start
-
+```
 #### 🐳 Run with Docker (Optional)
 
 ```bash
@@ -54,3 +49,4 @@ docker build -t my-next-app .
 docker run -p 3000:3000 my-next-app
 
 # Then visit: http://localhost:3000
+```
